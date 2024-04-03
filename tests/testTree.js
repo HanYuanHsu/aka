@@ -58,6 +58,8 @@ function setup() {
 function draw() {
     myTree.grow(t);
     console.log(myTree.branches);
+    image(treeCanvas, 0, 0);
+
     t += 1;
 }
 

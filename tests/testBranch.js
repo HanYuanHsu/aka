@@ -2,8 +2,12 @@ let t, x, y, trunkWidth, b, c, d, e, bArray;
 
 function setup() {
     noStroke();
+    mainCanvas = createCanvas(windowWidth, windowHeight);
+    //P5Object.setCanvas(mainCanvas); // ??
+    mainCanvas.background(240);
     treeCanvas = createGraphics(windowWidth, windowHeight);
     treeCanvas.background(240);
+    treeCanvas.noStroke();
     x = windowWidth / 2;
     y = windowHeight - 50;
     trunkWidth = 70;
@@ -18,8 +22,8 @@ function setup() {
         nFrames: 240,
         wriggle: 0.3,
         inverseSlope: -1,
-        styleFunction: () => {
-            fill('green');
+        styleFunction: (thisBranch) => {
+            thisBranch.canvas.fill('green');
         }
     });
     b.setCanvas(treeCanvas);
@@ -85,6 +89,7 @@ function draw() {
     c.grow(t);
     d.grow(t);
     e.grow(t);
+    image(treeCanvas, 0, 0);
     t += 1;
     //stroke('brown');
     //strokeWeight(100);

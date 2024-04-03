@@ -4,6 +4,14 @@
  * https://openprocessing.org/sketch/2198756
  */
 
+
+/*
+ * recap of javascript's `new`:
+ * If we write let b = new BranchTemplate(...)
+ * a blank plain object will be created called b
+ * and its prototype will point to the constructor function's prototype,
+ * namely BranchTemplate.prototype
+ */
 function BranchTemplate({
     startLoc,
     startWidth,
@@ -41,9 +49,7 @@ function BranchTemplate({
     this.curHeight = []; // ...
     this._initCurHeight();
 }
-
-BranchTemplate.prototype = Object.create(P5Object.prototype);
-BranchTemplate.prototype.constructor = BranchTemplate;
+Object.setPrototypeOf(BranchTemplate.prototype, P5Object.prototype);
 
 /**
  * change this ... 
@@ -115,7 +121,7 @@ function Tree() {
     this.branches = [];
 
     let trunkStartWidth = 200;
-    this.branches.push(new BranchTemplate({
+    let trunk = new BranchTemplate({
         startLoc: createVector(windowWidth / 2, windowHeight),
         inverseSlope: 0,
         startWidth: trunkStartWidth,
@@ -125,11 +131,11 @@ function Tree() {
         nFrames: 180,
         wriggle: 0.3,
         onEnd: (thisBranch) => this.divide(thisBranch)
-    }));
+    });
+    trunk.setCanvas(this.canvas);
+    this.branches.push(trunk);
 }
-
-Tree.prototype = Object.create(P5Object.prototype);
-Tree.prototype.constructor = Tree;
+Object.setPrototypeOf(Tree.prototype, P5Object.prototype);
 
 Tree.prototype.grow = function (t) {
     this.branches.forEach(branch => {
@@ -156,6 +162,7 @@ Tree.prototype.divide = function (branch) {
         wriggle: 0.3,
         onEnd: (thisBranch) => this.divide(thisBranch)
     });
+    b1.setCanvas(this.canvas);
 
     let b2 = new BranchTemplate({
         startLoc: startLoc2,
@@ -168,6 +175,7 @@ Tree.prototype.divide = function (branch) {
         wriggle: 0.3,
         onEnd: (thisBranch) => this.divide(thisBranch)
     });
+    b2.setCanvas(this.canvas);
 
     this.branches.push(b1);
     this.branches.push(b2);
