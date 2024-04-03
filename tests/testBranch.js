@@ -17,6 +17,7 @@ function setup() {
         startTime: 0,
         nFrames: 240,
         wriggle: 0.3,
+        inverseSlope: -1,
         styleFunction: () => {
             fill('green');
         }
@@ -44,6 +45,7 @@ function setup() {
 
     e = new BranchTemplate({
         startLoc: createVector(windowWidth/2 + 100, windowHeight - 10),
+        inverseSlope: .3,
         startWidth: 100,
         endWidth: 10,
         height: 600,

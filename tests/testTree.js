@@ -1,4 +1,4 @@
-let t, b, c, d, e, bArray;
+let t, b, c, d, e, bArray, myTree;
 
 function setup() {
 	noStroke();
@@ -8,6 +8,9 @@ function setup() {
     
 	bArray = [];
 
+    myTree = new Tree();
+
+    /*
     b = BranchTemplate({
         startLoc: createVector(windowWidth/2, windowHeight - 20),
         startWidth: 120,
@@ -46,10 +49,14 @@ function setup() {
 		bArray.push(new BranchTemplate({
 			
 		}));
-	}
+	}*/
+
+
 }
 
 function draw() {
+    myTree.grow(t);
+    console.log(myTree.branches);
 	t += 1;
 }
 
