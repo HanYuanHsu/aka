@@ -3,7 +3,7 @@ const P5Object = {
     defaultCanvas: undefined,
 }*/
 
-function P5Object({ canvas = undefined }) {
+function P5Object({ canvas } = {}) {
     if (canvas !== undefined) {
         this.canvas = canvas;
     } else if (P5Object.prototype.defaultCanvas !== undefined) {

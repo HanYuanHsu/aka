@@ -1,3 +1,10 @@
+function FireFly({ x: x, y: y }) {
+    P5Object.call(this);
+    this.pos = createVector(x, y);
+
+}
+Object.setPrototypeOf(FireFly.prototype, P5Object.prototype);
+
 class fireFly {
     constructor(x, y) {
         this.pos = createVector(x, y)

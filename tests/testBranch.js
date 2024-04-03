@@ -1,10 +1,11 @@
 let t, x, y, trunkWidth, b, c, d, e, bArray;
 
 function setup() {
-    noStroke();
     mainCanvas = createCanvas(windowWidth, windowHeight);
-    //P5Object.setCanvas(mainCanvas); // ??
+    P5Object.setDefaultCanvas(mainCanvas);
     mainCanvas.background(240);
+    mainCanvas.noStroke();
+
     treeCanvas = createGraphics(windowWidth, windowHeight);
     treeCanvas.background(240);
     treeCanvas.noStroke();
