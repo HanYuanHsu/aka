@@ -157,10 +157,18 @@ function Tree({
         iteration: 0,
         onEnd: (thisBranch) => this.divide(thisBranch)
     });
-    trunk.setCanvas(this.canvas);
+    trunk.setCanvas(undefined);
     this.branches.push(trunk);
 }
 Object.setPrototypeOf(Tree.prototype, P5Object.prototype);
+
+// overrides P5Object's setCanvas
+Tree.prototype.setCanvas = function (canvas) {
+    this.canvas = canvas;
+    this.branches.forEach(branch => {
+        branch.setCanvas(canvas);
+    });
+}
 
 Tree.prototype.grow = function (t) {
     this.branches.forEach(branch => {
@@ -190,6 +198,7 @@ Tree.prototype.divide = function (branch) {
         nFrames: branch.nFrames,
         wriggle: 0.3,
         iteration: branch.iteration + 1, // next iteration
+        styleFunction: branch.styleFunction,
         onEnd: (thisBranch) => this.divide(thisBranch)
     });
     b1.setCanvas(this.canvas);
@@ -204,6 +213,7 @@ Tree.prototype.divide = function (branch) {
         nFrames: branch.nFrames,
         wriggle: 0.3,
         iteration: branch.iteration + 1, // next iteration
+        styleFunction: branch.styleFunction,
         onEnd: (thisBranch) => this.divide(thisBranch)
     });
     b2.setCanvas(this.canvas);

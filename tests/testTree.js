@@ -1,65 +1,46 @@
-let t, b, c, d, e, bArray, myTree;
-let fireflies;
+let tree1, tree2;
+let canvas2;
 
 function setup() {
     noStroke();
     createCanvas(windowWidth, windowHeight);
     background(240);
+
+    canvas2 = createGraphics(windowWidth, windowHeight);
+    canvas2.clear(); // transparent background
+    canvas2.noStroke();
+
     t = 0;
 
-    bArray = [];
+    tree1 = new Tree({
+        startLocation: createVector(windowWidth / 3, windowHeight)
+    });
 
-    myTree = new Tree();
-
-    /*
-    b = BranchTemplate({
-        startLoc: createVector(windowWidth/2, windowHeight - 20),
-        startWidth: 120,
-        endWidth: 60,
-        height: 200,
-        startTime: 0,
-        nFrames: 180,
-        wriggle: 0.3,
-        onEnd: (endInfo) => {
-            bArray.push(new BranchTemplate({
-                startLoc: createVector(windowWidth/2, windowHeight - 20),
-                startWidth: 120,
-                endWidth: 60,
-                height: 200,
-                startTime: 0,
-                nFrames: 180,
-                wriggle: 0.3,
-            }));
-        },
-    })
-
-    let prevEnd = {
-        endLoc: createVector(windowWidth/2 + 100, windowHeight - 10),
-        endWidth: 100
-    };
-    for (let i=0; i<7; i++) {
-        let bt = new BranchTemplate({
-            startLoc: prevEnd.endLoc,
-            startWidth: prevEnd.endWidth,
-            endWidth: 100 / 2 ** i,
-            height: 400 / 2**i,
-            startTime: 0,
-            nFrames: 240,
-            wriggle: 0.4
-      });
-        bArray.push(new BranchTemplate({
-        	
-        }));
-    }*/
-
-
+    tree2 = new Tree({
+        startLocation: createVector(windowWidth * 2 / 3, windowHeight)
+    });
+    tree2.branches[0].styleFunction = (trunk) => {
+        console.log(`is trunk canvas undefined: ${trunk.canvas === undefined}`)
+        let branchColor = color(0, 0, 255, 20);
+        //branchColor.setAlpha(20);
+        if (trunk.canvas !== undefined) {
+            trunk.canvas.fill(0, 0, 255, 20);
+        } else {
+            fill(0, 0, 255, 20);
+        }
+    }
+    tree2.setCanvas(canvas2);
 }
 
 function draw() {
-    myTree.grow(t);
-    console.log(myTree.branches);
-    image(treeCanvas, 0, 0);
+    canvas2.clear(); // remember to do this!
+    // Since image(canvas2, 0, 0) will be called every frame
+    // if you don't do clear, multiple images of canvas2 will get stacked together
 
+    tree1.grow(t);
+    tree2.grow(t);
+
+    image(canvas2, 0, 0);
     t += 1;
 }
 

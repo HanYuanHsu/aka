@@ -18,11 +18,15 @@ function P5Object(options) {
 }
 
 // gets a P5Object instance's canvas
+// if your object inherits P5Object,
+// you can override this method
 P5Object.prototype.getCanvas = function () {
     return this.canvas;
 }
 
 // sets a P5Object instance's canvas
+// if your object inherits P5Object,
+// you can override this method
 P5Object.prototype.setCanvas = function (canvas) {
     this.canvas = canvas;
 }
