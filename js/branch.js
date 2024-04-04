@@ -20,11 +20,16 @@ function BranchTemplate({
     startTime,
     nFrames,
     wriggle,
+    iteration,
     inverseSlope = 0,
     styleFunction = (thisBranch) => {
         let branchColor = color(125, 79, 9);
         branchColor.setAlpha(20);
-        thisBranch.canvas.fill(branchColor);
+        if (thisBranch.canvas !== undefined) {
+            thisBranch.canvas.fill(branchColor);
+        } else {
+            fill(branchColor);
+        }
     },
     onEnd = (thisBranch) => { },
     startPhase = 0
@@ -39,7 +44,8 @@ function BranchTemplate({
     this.startTime = startTime; // The global time when this branch starts to grow
     this.nFrames = nFrames; // Number of frames for this branch to grow
     this.inverseSlope = inverseSlope; // the inverse slope of the growing direction
-    this.wriggle = wriggle;
+    this.wriggle = wriggle; // controls how wriggly the branch is
+    this.iteration = iteration; // what iteration this branch is created at
     this.styleFunction = styleFunction; // for the color, alpha, ... of the branch
     this.onEnd = onEnd; // callback function when the branch has ended growing.
     // it takes in endInfo, a dictionary containing the info
@@ -79,9 +85,18 @@ BranchTemplate.prototype.grow = function (t) {
     for (let i = this.curHeight[relTime]; i < this.curHeight[relTime + 1]; i++) {
         let curWidth = Math.floor(this.startWidth + i / this.height * (this.endWidth - this.startWidth));
         let wrig = this._getWriggle(i);
-        this.canvas.ellipse(x + i * this.inverseSlope + wrig,
-            y - i,
-            curWidth, 20);
+
+        if (this.canvas !== undefined) {
+            this.canvas.ellipse(
+                x + i * this.inverseSlope + wrig,
+                y - i,
+                curWidth, 20);
+        } else {
+            ellipse(
+                x + i * this.inverseSlope + wrig,
+                y - i,
+                curWidth, 20);
+        }
     }
 
     if (relTime == this.nFrames - 1) {
@@ -96,7 +111,8 @@ BranchTemplate.prototype._getWriggle = function (i) {
 BranchTemplate.prototype.getEndLocation = function () {
     let x = this.startLoc.x;
     let y = this.startLoc.y;
-    return createVector(x + this.height * this.inverseSlope + this._getWriggle(this.height),
+    return createVector(
+        x + this.height * this.inverseSlope + this._getWriggle(this.height),
         y - this.height);
 }
 
@@ -115,14 +131,22 @@ BranchTemplate.prototype.getEnd = function() {
     };
 }*/
 
-function Tree() {
+/**
+ * 
+ * @param {p5.Vector} startLocation starting location for the tree to grow
+ */
+function Tree({
+    startLocation
+}) {
     P5Object.call(this);
 
     this.branches = [];
 
     let trunkStartWidth = 200;
+
+    // make tree trunk
     let trunk = new BranchTemplate({
-        startLoc: createVector(windowWidth / 2, windowHeight),
+        startLoc: startLocation,
         inverseSlope: 0,
         startWidth: trunkStartWidth,
         endWidth: trunkStartWidth * 0.7,
@@ -130,6 +154,7 @@ function Tree() {
         startTime: 0,
         nFrames: 180,
         wriggle: 0.3,
+        iteration: 0,
         onEnd: (thisBranch) => this.divide(thisBranch)
     });
     trunk.setCanvas(this.canvas);
@@ -144,6 +169,10 @@ Tree.prototype.grow = function (t) {
 }
 
 Tree.prototype.divide = function (branch) {
+    // decide whether to divide based on 
+    // the iteration of `branch`
+    if (branch.iteration >= 2) return;
+
     let startWid = Math.floor(branch.endWidth / 2); // starting width of sub-branch
     let prevEndLoc = branch.getEndLocation();
     let startLoc1 = createVector(Math.floor(prevEndLoc.x - startWid / 2),
@@ -160,6 +189,7 @@ Tree.prototype.divide = function (branch) {
         startTime: branch.endGlobalTime(),
         nFrames: branch.nFrames,
         wriggle: 0.3,
+        iteration: branch.iteration + 1, // next iteration
         onEnd: (thisBranch) => this.divide(thisBranch)
     });
     b1.setCanvas(this.canvas);
@@ -173,6 +203,7 @@ Tree.prototype.divide = function (branch) {
         startTime: branch.endGlobalTime(),
         nFrames: branch.nFrames,
         wriggle: 0.3,
+        iteration: branch.iteration + 1, // next iteration
         onEnd: (thisBranch) => this.divide(thisBranch)
     });
     b2.setCanvas(this.canvas);

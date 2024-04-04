@@ -1,31 +1,28 @@
-/*
-const P5Object = {
-    defaultCanvas: undefined,
-}*/
-
-function P5Object({ canvas } = {}) {
-    if (canvas !== undefined) {
-        this.canvas = canvas;
-    } else if (P5Object.prototype.defaultCanvas !== undefined) {
-        this.canvas = P5Object.prototype.defaultCanvas;
-    } else {
-        console.error("Please do P5Object.setDefaultCanvas first!");
-    }
+/**
+ * All the objects to be displayed on a P5 canvas should inherit P5Object
+ * because we need to decide which canvas an object should be displayed on.
+ * If this.canvas is undefined, this P5Object instance will be drawn on the canvas
+ * specified by createCanvas(...)
+ * 
+ * FOR NOW, WE WILL NOT USE defaultCanvas FUNCTIONALITY
+ */
+function P5Object(options) {
+    // if options is not provided, this.canvas will be undefined.
+    this.canvas = options?.canvas;
 
     /*
-    this.setDefaultCanvas = function (canvas) {
-        defaultCanvas = canvas;
-    }*/
+    if (this.canvas === undefined) {
+        this.canvas = P5Object.prototype.defaultCanvas;
+    }
+    */
 }
 
-/*
-P5Object.setDefaultCanvas = function (canvas) {
-    defaultCanvas = canvas;
-}*/
+// gets a P5Object instance's canvas
 P5Object.prototype.getCanvas = function () {
     return this.canvas;
 }
 
+// sets a P5Object instance's canvas
 P5Object.prototype.setCanvas = function (canvas) {
     this.canvas = canvas;
 }
