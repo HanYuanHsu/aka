@@ -25,8 +25,8 @@ function BranchTemplate({
     styleFunction = (thisBranch) => {
         let branchColor = color(125, 79, 9);
         branchColor.setAlpha(20);
-        if (thisBranch.canvas !== undefined) {
-            thisBranch.canvas.fill(branchColor);
+        if (thisBranch.getCanvas() !== undefined) {
+            thisBranch.getCanvas().fill(branchColor);
         } else {
             fill(branchColor);
         }
@@ -86,8 +86,8 @@ BranchTemplate.prototype.grow = function (t) {
         let curWidth = Math.floor(this.startWidth + i / this.height * (this.endWidth - this.startWidth));
         let wrig = this._getWriggle(i);
 
-        if (this.canvas !== undefined) {
-            this.canvas.ellipse(
+        if (this.getCanvas() !== undefined) {
+            this.getCanvas().ellipse(
                 x + i * this.inverseSlope + wrig,
                 y - i,
                 curWidth, 20);
@@ -99,6 +99,7 @@ BranchTemplate.prototype.grow = function (t) {
         }
     }
 
+    // call onEnd when the branch has stopped growing
     if (relTime == this.nFrames - 1) {
         this.onEnd(this);
     }
@@ -145,7 +146,7 @@ function Tree({
     let trunkStartWidth = 200;
 
     // make tree trunk
-    let trunk = new BranchTemplate({
+    let trunk = this._makeNewBranch({
         startLoc: startLocation,
         inverseSlope: 0,
         startWidth: trunkStartWidth,
@@ -157,18 +158,40 @@ function Tree({
         iteration: 0,
         onEnd: (thisBranch) => this.divide(thisBranch)
     });
-    trunk.setCanvas(undefined);
+
     this.branches.push(trunk);
 }
 Object.setPrototypeOf(Tree.prototype, P5Object.prototype);
 
+/**
+ * ??????????????????????????
+ * @param {*} props the same thing you will pass into BranchTemplate to initiate a branch.
+ * @returns a branch subordinate to this tree 
+ *          so that its canvas always refers to this tree's canvas.
+ */
+Tree.prototype._makeNewBranch = function (props) {
+    let br = new BranchTemplate(props);
+    const thisTree = this;
+
+    br.getCanvas = function () {
+        return thisTree.getCanvas();
+    }
+
+    br.setCanvas = function () {
+        throw new Error("I have suppressed setCanvas");
+    }
+
+    return br;
+}
+
+/*
 // overrides P5Object's setCanvas
 Tree.prototype.setCanvas = function (canvas) {
     this.canvas = canvas;
     this.branches.forEach(branch => {
         branch.setCanvas(canvas);
     });
-}
+}*/
 
 Tree.prototype.grow = function (t) {
     this.branches.forEach(branch => {
@@ -188,7 +211,7 @@ Tree.prototype.divide = function (branch) {
     let startLoc2 = createVector(Math.floor(prevEndLoc.x + startWid / 2),
         prevEndLoc.y);
 
-    let b1 = new BranchTemplate({
+    let b1 = this._makeNewBranch({
         startLoc: startLoc1,
         inverseSlope: -1,
         startWidth: startWid,
@@ -201,9 +224,8 @@ Tree.prototype.divide = function (branch) {
         styleFunction: branch.styleFunction,
         onEnd: (thisBranch) => this.divide(thisBranch)
     });
-    b1.setCanvas(this.canvas);
 
-    let b2 = new BranchTemplate({
+    let b2 = this._makeNewBranch({
         startLoc: startLoc2,
         inverseSlope: 1,
         startWidth: startWid,
@@ -216,7 +238,6 @@ Tree.prototype.divide = function (branch) {
         styleFunction: branch.styleFunction,
         onEnd: (thisBranch) => this.divide(thisBranch)
     });
-    b2.setCanvas(this.canvas);
 
     this.branches.push(b1);
     this.branches.push(b2);

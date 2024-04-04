@@ -19,17 +19,30 @@ function setup() {
     tree2 = new Tree({
         startLocation: createVector(windowWidth * 2 / 3, windowHeight)
     });
+
+    // change the style of tree2's trunk
     tree2.branches[0].styleFunction = (trunk) => {
-        console.log(`is trunk canvas undefined: ${trunk.canvas === undefined}`)
+        //console.log(`is trunk canvas undefined: ${trunk.canvas === undefined}`)
         let branchColor = color(0, 0, 255, 20);
-        //branchColor.setAlpha(20);
-        if (trunk.canvas !== undefined) {
-            trunk.canvas.fill(0, 0, 255, 20);
+        branchColor.setAlpha(20);
+        if (trunk.getCanvas() !== undefined) {
+            trunk.getCanvas().fill(branchColor);
         } else {
-            fill(0, 0, 255, 20);
+            fill(branchColor);
         }
     }
     tree2.setCanvas(canvas2);
+
+    // check if canvases of trees are set up correctly
+    if (tree1.getCanvas() !== undefined) throw new Error("canvas mismatch");
+    for (let branch of tree1.branches) {
+        if (branch.getCanvas() !== undefined) throw new Error("canvas mismatch");
+    }
+
+    if (tree2.getCanvas() !== canvas2) throw new Error("canvas mismatch");
+    for (let branch of tree2.branches) {
+        if (branch.getCanvas() !== canvas2) throw new Error("canvas mismatch");
+    }
 }
 
 function draw() {
