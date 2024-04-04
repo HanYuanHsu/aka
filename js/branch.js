@@ -164,7 +164,8 @@ function Tree({
 Object.setPrototypeOf(Tree.prototype, P5Object.prototype);
 
 /**
- * ??????????????????????????
+ * Use this to make new branches in this tree to ensure their canvas is set up properly.
+ * 
  * @param {*} props the same thing you will pass into BranchTemplate to initiate a branch.
  * @returns a branch subordinate to this tree 
  *          so that its canvas always refers to this tree's canvas.
@@ -177,7 +178,7 @@ Tree.prototype._makeNewBranch = function (props) {
         return thisTree.getCanvas();
     }
 
-    br.setCanvas = function () {
+    br.setCanvas = function (canvas) {
         throw new Error("I have suppressed setCanvas");
     }
 
