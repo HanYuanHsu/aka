@@ -1,3 +1,7 @@
+/**
+ * 
+ * @param {p5.Vector} position 
+ */
 function MovingCircle({
     position,
     radius,
@@ -29,9 +33,9 @@ MovingCircle.prototype.update = function () {
 };
 
 MovingCircle.prototype.display = function () {
-    let c1 = color("blue");
-    c1.setAlpha(50);
-    let c2 = color("blue");
+    let c1 = color("yellow");
+    c1.setAlpha(100);
+    let c2 = color("yellow");
     c2.setAlpha(0);
 
     let drawCxt;

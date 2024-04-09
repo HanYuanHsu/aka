@@ -1,8 +1,9 @@
 let tree1, tree2, fireflies;
 let treeCanvas; // trees will be drawn on this canvas
-let firefliesCanvas;
+//let firefliesCanvas;
 let img;
 let t; // global time
+const bgColor = 250;
 
 function preload() {
     // loads the doge image from my google drive
@@ -12,13 +13,13 @@ function preload() {
 function setup() {
     noStroke();
     createCanvas(windowWidth, windowHeight);
-    background(240);
+    background(bgColor);
 
     treeCanvas = createGraphics(windowWidth, windowHeight);
     treeCanvas.noStroke();
 
-    firefliesCanvas = createGraphics(windowWidth, windowHeight);
-    firefliesCanvas.noStroke();
+    //firefliesCanvas = createGraphics(windowWidth, windowHeight);
+    //firefliesCanvas.noStroke();
 
     t = 0;
 
@@ -51,7 +52,7 @@ function setup() {
         worldWidth: windowWidth,
         worldHeight: windowHeight
     });
-    fireflies.setCanvas(firefliesCanvas);
+    //fireflies.setCanvas(firefliesCanvas);
 
     for (let i = 0; i < 30; i++) {
         fireflies.addCircle();
@@ -59,10 +60,7 @@ function setup() {
 }
 
 function draw() {
-    treeCanvas.clear(); // remember to do this!
-    // Since image(canvas2, 0, 0) will be called every frame
-    // if you don't do clear, multiple images of canvas2 will get stacked together
-    firefliesCanvas.clear();
+    background(bgColor);
 
     tree1.grow(t);
     tree2.grow(t);
@@ -71,7 +69,7 @@ function draw() {
 
     // firefliesCanvas will be the background,
     // so it should be shown first
-    image(firefliesCanvas, 0, 0);
+    //image(firefliesCanvas, 0, 0);
     image(treeCanvas, 0, 0);
 
     t += 1;

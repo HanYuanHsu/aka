@@ -121,17 +121,6 @@ BranchTemplate.prototype.endGlobalTime = function () {
     return this.startTime + this.nFrames;
 }
 
-/*
-BranchTemplate.prototype.getEnd = function() {
-    return {
-        endLoc: createVector(
-            x + cos(this.nFrames/10*this.wriggle) / this.wriggle, 
-            y - this.height),
-        endWidth: this.endWidth,
-        endGlobalTime: this.startTime + this.nFrames
-    };
-}*/
-
 /**
  * 
  * @param {p5.Vector} startLocation starting location for the tree to grow
@@ -186,15 +175,6 @@ Tree.prototype._makeNewBranch = function (props) {
 
     return br;
 }
-
-/*
-// overrides P5Object's setCanvas
-Tree.prototype.setCanvas = function (canvas) {
-    this.canvas = canvas;
-    this.branches.forEach(branch => {
-        branch.setCanvas(canvas);
-    });
-}*/
 
 Tree.prototype.grow = function (t) {
     this.branches.forEach(branch => {
