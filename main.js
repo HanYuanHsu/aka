@@ -4,7 +4,10 @@ let img;
 let g;
 
 function preload() {
-    img = loadImage('assets/doge.png');
+    img = loadImage("https://lh3.googleusercontent.com/drive-viewer/AKGpihbVApBRA6ujGkmcApaoL_z5q4SyZfBNOPJHkNVeGxKYVCV2IB8WB5sSdd0DB4kXagbVGaHAAuXm6wo__IQTqSENw1V5lJlK-A=s1600-rw-v1");
+    // if you use images on the local side, you need to set up a server to prevent CORS error
+    // I tried http-server downloaded from npm, but it seems to break other functionality of p5.js
+    // I also tried base64, and it had some weird issues as well.
 }
 
 function setup() {
