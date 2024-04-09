@@ -34,7 +34,7 @@ MovingCircle.prototype.update = function () {
 
 MovingCircle.prototype.display = function () {
     let c1 = color("yellow");
-    c1.setAlpha(100);
+    c1.setAlpha(130);
     let c2 = color("yellow");
     c2.setAlpha(0);
 
