@@ -14,6 +14,7 @@ function MovingCircle({
     this.worldWidth = worldWidth;
     this.worldHeight = worldHeight;
 }
+Object.setPrototypeOf(MovingCircle.prototype, P5Object.prototype);
 
 // update this circle's position
 MovingCircle.prototype.update = function () {
@@ -40,7 +41,6 @@ MovingCircle.prototype.display = function () {
 
     circle(this.pos.x, this.pos.y, 2 * this.r);
 };
-Object.setPrototypeOf(MovingCircle.prototype, P5Object.prototype);
 
 
 function Fireflies(commonOptions) { // finish commonOptions

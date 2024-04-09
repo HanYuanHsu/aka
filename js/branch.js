@@ -137,11 +137,13 @@ BranchTemplate.prototype.getEnd = function() {
  * @param {p5.Vector} startLocation starting location for the tree to grow
  */
 function Tree({
-    startLocation
+    startLocation,
+    dogeImg = null
 }) {
     P5Object.call(this);
 
     this.branches = [];
+    this.dogeImg = dogeImg;
 
     let trunkStartWidth = 200;
 
@@ -203,7 +205,12 @@ Tree.prototype.grow = function (t) {
 Tree.prototype.divide = function (branch) {
     // decide whether to divide based on 
     // the iteration of `branch`
-    if (branch.iteration >= 2) return;
+    if (branch.iteration >= 1) {
+        if (this.dogeImg) {
+            growDoge(branch, img);
+        }
+        return;
+    };
 
     let startWid = Math.floor(branch.endWidth / 2); // starting width of sub-branch
     let prevEndLoc = branch.getEndLocation();
@@ -242,4 +249,23 @@ Tree.prototype.divide = function (branch) {
 
     this.branches.push(b1);
     this.branches.push(b2);
+}
+
+function growDoge(branchTemplate, img) {
+    let endLoc = branchTemplate.getEndLocation();
+    let imageWidth = 100;
+    let hwRatio = 1; // (img height) / (img width)
+
+    if (branchTemplate.getCanvas() !== undefined) {
+        branchTemplate.getCanvas()
+            .image(img,
+                endLoc.x - imageWidth / 2,
+                endLoc.y - imageWidth * hwRatio,
+                100, 100);
+    } else {
+        image(img,
+            endLoc.x - imageWidth / 2,
+            endLoc.y - imageWidth * hwRatio,
+            100, 100);
+    }
 }
