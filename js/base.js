@@ -1,7 +1,7 @@
 /**
  * All the objects to be displayed on a P5 canvas should inherit P5Object
  * because we need to decide which canvas an object should be displayed on.
- * If this.canvas is undefined, this P5Object instance will be drawn on the canvas
+ * If this.canvas is undefined, this P5Object instance will be drawn on the main canvas
  * specified by createCanvas(...)
  * 
  * FOR NOW, WE WILL NOT USE defaultCanvas FUNCTIONALITY

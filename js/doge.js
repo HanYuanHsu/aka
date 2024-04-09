@@ -8,4 +8,4 @@ function Doges({
     P5Object.call(this, { canvas: canvas });
 
 }
-Object.setPrototypeOf(MovingCircle.prototype, P5Object.prototype);
+Object.setPrototypeOf(Doges.prototype, P5Object.prototype);

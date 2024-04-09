@@ -34,19 +34,36 @@ MovingCircle.prototype.display = function () {
     let c2 = color("blue");
     c2.setAlpha(0);
 
-    let coloring = drawingContext.createRadialGradient(this.pos.x, this.pos.y, this.r * 0.1, this.pos.x, this.pos.y, this.r);
+    let drawCxt;
+    if (this.getCanvas() !== undefined) {
+        drawCxt = this.getCanvas().drawingContext;
+    } else {
+        drawCxt = drawingContext;
+    }
+
+    let coloring = drawCxt.createRadialGradient(this.pos.x, this.pos.y, this.r * 0.1, this.pos.x, this.pos.y, this.r);
     coloring.addColorStop(0, c1);
     coloring.addColorStop(1, c2);
-    drawingContext.fillStyle = coloring;
+    drawCxt.fillStyle = coloring;
 
-    circle(this.pos.x, this.pos.y, 2 * this.r);
+    if (this.getCanvas() !== undefined) {
+        this.getCanvas().circle(this.pos.x, this.pos.y, 2 * this.r);
+    } else {
+        circle(this.pos.x, this.pos.y, 2 * this.r);
+    }
 };
 
 
+/**
+ * 
+ * @param {*} commonOptions the options (traits) that all the fireflies in this FireFlies instance
+ *                          have in common.
+ */
 function Fireflies(commonOptions) { // finish commonOptions
     P5Object.call(this);
 
     this.circles = [];
+    this.commonOptions = commonOptions;
 }
 Object.setPrototypeOf(Fireflies.prototype, P5Object.prototype);
 
@@ -72,6 +89,17 @@ Fireflies.prototype.makeNewCircle = function (circleOptions) {
 
     return newCircle;
 };
+
+/**
+ * adds a moving circle at a random location
+ */
+Fireflies.prototype.addCircle = function () {
+    let x = random(0, this.commonOptions.worldWidth);
+    let y = random(0, this.commonOptions.worldHeight);
+    let circleOptions = { ...this.commonOptions }; // shallow copy
+    circleOptions.position = createVector(x, y);
+    this.circles.push(this.makeNewCircle(circleOptions));
+}
 
 // call this for each frame
 Fireflies.prototype.animate = function () {
