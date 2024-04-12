@@ -40,3 +40,18 @@ P5Object.getDefaultCanvas = function () {
 P5Object.setDefaultCanvas = function (canvas) {
     P5Object.prototype.defaultCanvas = canvas;
 }
+
+
+
+
+
+/* Utils */
+
+/**
+ * Generates a random float number in the interval [a, b], where a <= b
+ * @param {*} a 
+ * @param {*} b 
+ */
+function getRandom(a, b) {
+    return a + Math.random() * (b - a);
+}

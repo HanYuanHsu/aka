@@ -1,18 +1,20 @@
 let tree1, tree2, fireflies;
+let mainCanvas;
 let treeCanvas; // trees will be drawn on this canvas
 //let firefliesCanvas;
 let img;
 let t; // global time
 const bgColor = 250;
+//let gif; // for making gif
 
 function preload() {
     // loads the doge image from my google drive
-    img = loadImage("https://lh3.googleusercontent.com/drive-viewer/AKGpihbVApBRA6ujGkmcApaoL_z5q4SyZfBNOPJHkNVeGxKYVCV2IB8WB5sSdd0DB4kXagbVGaHAAuXm6wo__IQTqSENw1V5lJlK-A=s1600-rw-v1");
+    img = loadImage("assets/doge_transparent.png");
 }
 
 function setup() {
     noStroke();
-    createCanvas(windowWidth, windowHeight);
+    mainCanvas = createCanvas(windowWidth, windowHeight);
     background(bgColor);
 
     treeCanvas = createGraphics(windowWidth, windowHeight);
@@ -57,6 +59,13 @@ function setup() {
     for (let i = 0; i < 30; i++) {
         fireflies.addCircle();
     }
+
+    // gif
+    //gif = new GIF();
+    //gif.on('finished', function (blob) {
+    //    window.open(URL.createObjectURL(blob));
+    //});
+    //saveGif('dogetree.gif', 9);
 }
 
 function draw() {
@@ -67,10 +76,9 @@ function draw() {
 
     fireflies.animate();
 
-    // firefliesCanvas will be the background,
-    // so it should be shown first
-    //image(firefliesCanvas, 0, 0);
     image(treeCanvas, 0, 0);
+
+    //gif.addFrame(mainCanvas);
 
     t += 1;
 }

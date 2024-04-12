@@ -124,14 +124,18 @@ BranchTemplate.prototype.endGlobalTime = function () {
 /**
  * 
  * @param {p5.Vector} startLocation starting location for the tree to grow
+ * @param {Array} divideProbs divideProbs[iter] means the probability that
+ *                            the branch at iteration iter will divide into subbraches
  */
 function Tree({
     startLocation,
+    divideProbs = [1, 0.7, 0.5],
     dogeImg = null
 }) {
     P5Object.call(this);
 
     this.branches = [];
+    this.divideProbs = divideProbs;
     this.dogeImg = dogeImg;
 
     let trunkStartWidth = 200;
@@ -183,14 +187,15 @@ Tree.prototype.grow = function (t) {
 }
 
 Tree.prototype.divide = function (branch) {
-    // decide whether to divide based on 
-    // the iteration of `branch`
-    if (branch.iteration >= 1) {
+    // check whether to divide
+    if (branch.iteration >= this.divideProbs.length ||
+        Math.random() >= this.divideProbs[branch.iteration]) {
+        // do not divide
         if (this.dogeImg) {
-            growDoge(branch, img);
+            growDoge(branch, this.dogeImg);
         }
         return;
-    };
+    }
 
     let startWid = Math.floor(branch.endWidth / 2); // starting width of sub-branch
     let prevEndLoc = branch.getEndLocation();
@@ -199,12 +204,20 @@ Tree.prototype.divide = function (branch) {
     let startLoc2 = createVector(Math.floor(prevEndLoc.x + startWid / 2),
         prevEndLoc.y);
 
+    let angle1 = getRandom(Math.PI / 6, Math.PI / 3); // 30 ~ 60 degrees
+    let angle2 = getRandom(Math.PI / 6, Math.PI / 3);
+    let slope1 = -Math.tan(angle1);
+    let slope2 = Math.tan(angle2);
+
+    let height1 = branch.height * (branch.iteration + 1) / (branch.iteration + 2) * getRandom(0.7, 1);
+    let height2 = branch.height * (branch.iteration + 1) / (branch.iteration + 2) * getRandom(0.7, 1);
+
     let b1 = this._makeNewBranch({
         startLoc: startLoc1,
-        inverseSlope: -1,
+        inverseSlope: 1 / slope1,
         startWidth: startWid,
         endWidth: startWid * 0.7,
-        height: branch.height / 2,
+        height: height1,
         startTime: branch.endGlobalTime(),
         nFrames: branch.nFrames,
         wriggle: 0.3,
@@ -215,10 +228,10 @@ Tree.prototype.divide = function (branch) {
 
     let b2 = this._makeNewBranch({
         startLoc: startLoc2,
-        inverseSlope: 1,
+        inverseSlope: 1 / slope2,
         startWidth: startWid,
         endWidth: startWid * 0.7,
-        height: branch.height * 0.6,
+        height: height2,
         startTime: branch.endGlobalTime(),
         nFrames: branch.nFrames,
         wriggle: 0.3,

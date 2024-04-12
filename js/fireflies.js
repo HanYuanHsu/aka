@@ -28,7 +28,7 @@ MovingCircle.prototype.update = function () {
 
     this.acc = p5.Vector.random2D().setMag(0.015);
     this.vel.add(this.acc);
-    this.vel.limit(1); // Limit the velocity to prevent it from becoming too fast
+    this.vel.limit(5); // Limit the velocity to prevent it from becoming too fast
     this.pos.add(this.vel); // Update the position based on velocity
 };
 
