@@ -180,6 +180,21 @@ Tree.prototype._makeNewBranch = function (props) {
     return br;
 }
 
+Tree.prototype._makeNewDoge = function (props) {
+    let doge = new Doge(props);
+    const thisTree = this;
+
+    doge.getCanvas = function () {
+        return thisTree.getCanvas();
+    }
+
+    doge.setCanvas = function (canvas) {
+        throw new Error("I have suppressed setCanvas");
+    }
+
+    return doge;
+}
+
 Tree.prototype.grow = function (t) {
     this.branches.forEach(branch => {
         branch.grow(t);
