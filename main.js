@@ -8,7 +8,6 @@ const bgColor = 250;
 //let gif; // for making gif
 
 function preload() {
-    // loads the doge image from my google drive
     img = loadImage("assets/doge_transparent.png");
 }
 
@@ -26,28 +25,28 @@ function setup() {
     t = 0;
 
     tree1 = new Tree({
-        startLocation: createVector(windowWidth / 3, windowHeight),
+        startLocation: createVector(windowWidth / 2, windowHeight),
         dogeImg: img
     });
     tree1.setCanvas(treeCanvas);
 
-    tree2 = new Tree({
-        startLocation: createVector(windowWidth * 2 / 3, windowHeight),
-        dogeImg: img
-    });
-    tree2.setCanvas(treeCanvas);
+    // tree2 = new Tree({
+    //     startLocation: createVector(windowWidth * 2 / 3, windowHeight),
+    //     dogeImg: img
+    // });
+    // tree2.setCanvas(treeCanvas);
 
-    // change the style of tree2's trunk
-    tree2.branches[0].styleFunction = (trunk) => {
-        //console.log(`is trunk canvas undefined: ${trunk.canvas === undefined}`)
-        let branchColor = color(0, 0, 255, 20);
-        branchColor.setAlpha(20);
-        if (trunk.getCanvas() !== undefined) {
-            trunk.getCanvas().fill(branchColor);
-        } else {
-            fill(branchColor);
-        }
-    }
+    // // change the style of tree2's trunk
+    // tree2.branches[0].styleFunction = (trunk) => {
+    //     //console.log(`is trunk canvas undefined: ${trunk.canvas === undefined}`)
+    //     let branchColor = color(0, 0, 255, 20);
+    //     branchColor.setAlpha(20);
+    //     if (trunk.getCanvas() !== undefined) {
+    //         trunk.getCanvas().fill(branchColor);
+    //     } else {
+    //         fill(branchColor);
+    //     }
+    // }
 
     fireflies = new Fireflies({
         radius: 50,
@@ -72,7 +71,7 @@ function draw() {
     background(bgColor);
 
     tree1.grow(t);
-    tree2.grow(t);
+    //tree2.grow(t);
 
     fireflies.animate();
 

@@ -52,6 +52,8 @@ function BranchTemplate({
     // about the end of the branch, such as 
     // its end location, end width, etc.
 
+    this.ellipseHeight = 20; // height of ellipse that builds branch
+
     this.curHeight = []; // ...
     this._initCurHeight();
 }
@@ -90,12 +92,12 @@ BranchTemplate.prototype.grow = function (t) {
             this.getCanvas().ellipse(
                 x + i * this.inverseSlope + wrig,
                 y - i,
-                curWidth, 20);
+                curWidth, this.ellipseHeight);
         } else {
             ellipse(
                 x + i * this.inverseSlope + wrig,
                 y - i,
-                curWidth, 20);
+                curWidth, this.ellipseHeight);
         }
     }
 
@@ -268,12 +270,12 @@ function growDoge(branchTemplate, img) {
         branchTemplate.getCanvas()
             .image(img,
                 endLoc.x - imageWidth / 2,
-                endLoc.y - imageWidth * hwRatio,
+                endLoc.y - imageWidth * hwRatio + branchTemplate.ellipseHeight / 2,
                 100, 100);
     } else {
         image(img,
             endLoc.x - imageWidth / 2,
-            endLoc.y - imageWidth * hwRatio,
+            endLoc.y - imageWidth * hwRatio + branchTemplate.ellipseHeight / 2,
             100, 100);
     }
 }
