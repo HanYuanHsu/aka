@@ -8,7 +8,7 @@ const bgColor = 250;
 //let gif; // for making gif
 
 function preload() {
-    img = loadImage("assets/doge_transparent.png");
+    img = loadImage("doge_transparent.png");
 }
 
 function setup() {
