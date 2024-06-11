@@ -140,7 +140,7 @@ function Tree({
     this.divideProbs = divideProbs;
     this.dogeImg = dogeImg;
 
-    let trunkStartWidth = 200;
+    let trunkStartWidth = min(windowWidth / 4, 200); // todo: remove dependece of "windowWidth"
 
     // make tree trunk
     let trunk = this._makeNewBranch({
@@ -148,7 +148,7 @@ function Tree({
         inverseSlope: 0,
         startWidth: trunkStartWidth,
         endWidth: trunkStartWidth * 0.7,
-        height: 300,
+        height: min(windowHeight * .4, 300), // todo: remove dependece of "windowHeight"
         startTime: 0,
         nFrames: 180,
         wriggle: 0.3,
@@ -204,22 +204,13 @@ Tree.prototype.grow = function (t) {
 }
 
 Tree.prototype.divide = function (branch) {
-    // check whether to divide
-    if (branch.iteration >= this.divideProbs.length ||
-        Math.random() >= this.divideProbs[branch.iteration]) {
-        // do not divide
-        if (this.dogeImg) {
-            growDoge(branch, this.dogeImg);
-        }
-        return;
-    }
 
     let startWid = Math.floor(branch.endWidth / 2); // starting width of sub-branch
     let prevEndLoc = branch.getEndLocation();
     let startLoc1 = createVector(Math.floor(prevEndLoc.x - startWid / 2),
-        prevEndLoc.y);
+        prevEndLoc.y); // starting location of new branch 1
     let startLoc2 = createVector(Math.floor(prevEndLoc.x + startWid / 2),
-        prevEndLoc.y);
+        prevEndLoc.y); // starting location of new branch 2
 
     let angle1 = getRandom(Math.PI / 6, Math.PI / 3); // 30 ~ 60 degrees
     let angle2 = getRandom(Math.PI / 6, Math.PI / 3);
@@ -228,6 +219,29 @@ Tree.prototype.divide = function (branch) {
 
     let height1 = branch.height * (branch.iteration + 1) / (branch.iteration + 2) * getRandom(0.7, 1);
     let height2 = branch.height * (branch.iteration + 1) / (branch.iteration + 2) * getRandom(0.7, 1);
+
+    // check if the new branches will grow out of screen bounds
+    // todo: remove dependece of "windowWidth" and windowHeight
+    // todo: might add worldWidth and worldHeight attributes in P5Object
+    let branch1EndX = startLoc1.x + (height1 / slope1);
+    let branch1EndY = startLoc1.y - height1;
+    let branch2EndX = startLoc2.x + (height2 / slope2);
+    let branch2EndY = startLoc2.y - height2;
+    let inBounds = 0 < branch1EndX && branch1EndX < windowWidth
+        && 0 < branch1EndY && branch1EndY < windowHeight
+        && 0 < branch2EndX && branch2EndX < windowWidth
+        && 0 < branch2EndY && branch2EndY < windowHeight;
+
+    let branchStop = branch.iteration >= this.divideProbs.length ||
+        Math.random() >= this.divideProbs[branch.iteration];
+
+    // do not divide if the following condition is true
+    if (branchStop || !inBounds) {
+        if (this.dogeImg) {
+            growDoge(branch, this.dogeImg);
+        }
+        return;
+    }
 
     let b1 = this._makeNewBranch({
         startLoc: startLoc1,
